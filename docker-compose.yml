@@ -8,7 +8,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-    - /code/test/db:/var/lib/mysql
+    - ./data/mysql:/var/lib/mysql
     environment:
       MYSQL_USER: user
       MYSQL_PASSWORD: user
@@ -38,6 +38,6 @@ services:
       - 50000:50000
     restart: always
     volumes:
-      - ~/jenkins:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/local/bin/docker:/usr/local/bin/docker
+      - ./data/jenkins/jenkins_home:/var/jenkins_home
+      - ./data/jenkins/var/run/docker.sock:/var/run/docker.sock
+      - ./data/jenkins/usr/local/bin/docker:/usr/local/bin/docker
