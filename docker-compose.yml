@@ -2,68 +2,70 @@ version : '3.8'
 
 services:
   mysql:
-    image: mysql:latest
     container_name: dev_mysql
+    image: mysql:latest
     restart: unless-stopped
-    ports:
-      - 3306:3306
-    volumes:
-    - ./data/mysql:/var/lib/mysql
     environment:
       MYSQL_USER: user
       MYSQL_PASSWORD: user
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: default_schema
+    ports:
+      - 3306:3306 #access mysql here
+    volumes:
+    - ./data/mysql:/var/lib/mysql
+
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
     container_name: dev_pma
-    links:
-      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
-    restart: unless-stopped
     ports:
-      - 8183:80
+      - 80:80 # access phpmyadmin here or at ip/phpmyadmin
+    links:
+      - mysql
 
   jenkins:
-    image: jenkins/jenkins:lts
     container_name: jenkins
+    image: jenkins/jenkins:lts
+    restart: unless-stopped
     privileged: true
     user: root
     ports:
-      - 8081:8080
+      - 8080:8080 # access jenkins here
       - 50000:50000
-    restart: unless-stopped
     volumes:
       - ./data/jenkins/jenkins_home:/var/jenkins_home
       - .data/jenkins/var/run/docker.sock:/var/run/docker.sock
       - ./data/jenkins/usr/local/bin/docker:/usr/local/bin/docker
 
   eclipse-theia:
-    restart: always
     container_name: theia
-    image: theiaide/theia-java:latest
+    image: theiaide/theia-java:latest # this deploys theia as a java ide. More flavours at https://github.com/theia-ide/theia-apps#theia-docker
+    restart: unless-stopped
     restart: unless-stopped
     init: true
     ports:
-      - 4000:3000
-      - 8083:8082
+      - 3000:3000 # access theia here
+#      - 8082:8082 # additional ports can be opened for endpoints
     volumes:
       - ./data/theia/projects:/home/project
 
   code-server:
-    image: linuxserver/code-server
     container_name: code-server
+    image: linuxserver/code-server
+    restart: unless-stopped
     environment:
       - TZ=Europe/Amsterdam
       - PASSWORD=password
       - SUDO_PASSWORD=password
+    ports:
+      - 8444:8443 # access vscode here
+      - 5500:5500 # for the live-server plugin
+#      - 4000:3000 # port for React. Port changed due to conflict with theia.
     volumes:
       - ./data/vsc/config:/config
-    ports:
-      - 8444:8443
-      - 5500:5500
-    restart: unless-stopped
