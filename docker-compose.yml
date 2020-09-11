@@ -59,8 +59,8 @@ services:
     container_name: code-server
     environment:
       - TZ=Europe/Amsterdam
-      - PASSWORD=password #optional
-      - SUDO_PASSWORD=password #optional
+      - PASSWORD=password
+      - SUDO_PASSWORD=password
     volumes:
       - ./data/vsc/config:/config
     ports:
