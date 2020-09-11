@@ -2,7 +2,7 @@ version : '3.8'
 
 services:
   mysql:
-    container_name: dev_mysql
+    container_name: mysql
     image: mysql:latest
     restart: unless-stopped
     environment:
@@ -17,7 +17,7 @@ services:
 
 
   phpmyadmin:
-    container_name: dev_pma
+    container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
     restart: unless-stopped
     environment:
